@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date, Float
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 
@@ -9,6 +9,7 @@ class Student(Base):
     id = Column(Integer, primary_key=True)
     fullname = Column(String, nullable=False)
     group_id = Column(Integer, ForeignKey('groups.id'))
+    group = relationship('Group', back_populates='students')
     grades = relationship('Grade', back_populates='student')
 
 class Group(Base):
@@ -42,5 +43,5 @@ class Grade(Base):
     subject = relationship('Subject', back_populates='grades')
 
 # Створюємо базу даних
-engine = create_engine('sqlite:///university.db')
+engine = create_engine('postgresql://postgres:s4v0e1t6a@localhost:5432/test')
 Base.metadata.create_all(engine)
